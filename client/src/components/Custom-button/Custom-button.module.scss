@@ -1,0 +1,25 @@
+.btn {
+  background-color: var(--color-primary);
+  color: var(--color-dark);
+  border: 2px solid var(--color-primary);
+  border-radius: 5px;
+  padding: 1rem 3rem;
+  font-family: var(--font-body);
+  font-size: var(--size-m);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-light);
+    border: 2px solid var(--color-light);
+  }
+}
+
+.inverted {
+  background-color: var(--color-light);
+  border: 2px solid var(--color-light);
+
+  &:hover {
+    background-color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+}

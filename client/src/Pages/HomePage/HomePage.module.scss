@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.logoWrapper {
+  width: 15rem;
+  height: 15rem;
+  border-radius: 50%;
+  background-color: var(--color-grey-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  background: url(./assets/smiling-emoticon-square-face.svg);
+  fill: var(--color-primary);
+}
+
+.title {
+  font-size: var(--size-xxxl);
+  color: var(--color-light);
+  max-width: 40rem;
+
+  span {
+    color: var(--color-primary);
+  }
+}

@@ -1,0 +1,50 @@
+:root {
+  --page-width-max: 900px;
+
+  --font-headings: "Dancing Script", cursive;
+  --font-body: "Open Sans", sans-serif;
+
+  --color-light: hsl(0, 0%, 96%);
+  --color-dark: hsl(225, 8%, 21%);
+  --color-grey-light: hsl(220, 1%, 68%);
+  --color-grey: hsl(220, 1%, 48%);
+  --color-grey-dark: hsl(222, 7%, 26%);
+  --color-primary: hsl(48, 99%, 59%);
+
+  --size-xxs: 0.8rem;
+  --size-xs: 1.2rem;
+  --size-s: 1.6rem;
+  --size-xm: 1.8rem;
+  --size-m: 2rem;
+  --size-l: 2.4rem;
+  --size-xxxl: 7.2rem;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--size-xm);
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+  * {
+    box-sizing: border-box;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+h1 {
+  font-family: var(--font-headings);
+}

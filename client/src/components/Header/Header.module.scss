@@ -1,0 +1,23 @@
+.headerWrapper {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.mainHeader {
+  max-width: var(--page-width-max);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menuBtn {
+  width: 2.5rem;
+  height: 2.5rem;
+  fill: var(--color-grey-light);
+  cursor: pointer;
+}
+
+h1 {
+  font-size: var(--size-l);
+  color: var(--color-primary);
+}

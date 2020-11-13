@@ -1,0 +1,23 @@
+.footerWrapper {
+  width: 100%;
+}
+
+.mainFooter {
+  max-width: var(--page-width-max);
+  display: flex;
+  justify-content: center;
+  // margin: 0 auto;
+}
+
+.copyright {
+  font-size: var(--size-xs);
+  color: var(--color-grey);
+
+  a {
+    color: var(--color-grey-light);
+
+    &:hover {
+      color: var(--color-light);
+    }
+  }
+}
