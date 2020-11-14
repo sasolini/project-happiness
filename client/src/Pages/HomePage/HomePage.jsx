@@ -14,17 +14,19 @@ const Header = () => (
     <h1 className={S.title}>
       Project <span>Happiness</span>
     </h1>
-    <CustomButton
-      styles={{ minWidth: "25rem", marginBottom: "var(--size-xxs)" }}
-    >
-      Register
-    </CustomButton>
-    <CustomButton
-      styles={{ minWidth: "25rem", marginBottom: "0.75rem" }}
-      inverted
-    >
-      Log in
-    </CustomButton>
+    <div>
+      <CustomButton
+        styles={{ minWidth: "25rem", marginBottom: "var(--size-xxs)" }}
+      >
+        Register
+      </CustomButton>
+      <CustomButton
+        styles={{ minWidth: "25rem", marginBottom: "0.75rem" }}
+        inverted
+      >
+        Log in
+      </CustomButton>
+    </div>
   </main>
 );
 

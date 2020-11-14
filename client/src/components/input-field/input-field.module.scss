@@ -1,0 +1,33 @@
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-grey);
+
+  & > label {
+    font-size: var(--size-s);
+    margin-bottom: 0.25rem;
+  }
+
+  & > input,
+  textarea {
+    font-size: var(--size-s);
+    font-family: inherit;
+    background-color: var(--color-grey-dark);
+    color: var(--color-grey-light);
+    padding: 0.5rem;
+    border: 1px solid var(--color-grey-dark);
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 3px;
+
+    &:focus {
+      border: 1px solid var(--color-grey);
+    }
+  }
+
+  & > textarea {
+    resize: none;
+    width: 100%;
+    height: 20rem;
+  }
+}
