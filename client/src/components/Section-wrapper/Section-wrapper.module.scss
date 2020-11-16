@@ -1,0 +1,16 @@
+.wrapper {
+  padding-bottom: var(--size-m);
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+h3 {
+  color: var(--color-light);
+  margin: 0;
+}

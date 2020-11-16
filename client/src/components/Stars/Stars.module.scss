@@ -1,0 +1,9 @@
+.wrapper {
+  display: flex;
+}
+
+.star {
+  fill: var(--color-primary);
+  width: var(--size-s);
+  margin: 0 2px;
+}

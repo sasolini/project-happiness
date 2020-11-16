@@ -1,14 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import S from "./input-field.module.scss";
+import S from "./Input-field.module.scss";
 
-const InputField = ({ fieldType, name, label, placeholder, styles }) => {
+const InputField = ({
+  fieldType,
+  name,
+  label,
+  placeholder,
+  value,
+  styles,
+  rows = 2,
+  changed,
+}) => {
   if (fieldType === "input") {
     return (
       <div style={styles} className={S.inputGroup}>
         {label && <label for={name}>{label}</label>}
-        <input type="text" name={name} id={name} placeholder={placeholder} />
+        <input
+          onChange={changed}
+          type="text"
+          name={name}
+          id={name}
+          placeholder={placeholder}
+        />
       </div>
     );
   } else if (fieldType === "textArea") {
@@ -16,10 +31,12 @@ const InputField = ({ fieldType, name, label, placeholder, styles }) => {
       <div style={styles} className={S.inputGroup}>
         {label && <label for={name}>{label}</label>}
         <textarea
+          onChange={changed}
           name={name}
           id={name}
+          defaultValue={value}
           placeholder={placeholder}
-          rows="4"
+          rows={rows}
           cols="50"
         ></textarea>
       </div>
@@ -32,7 +49,10 @@ InputField.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  rows: PropTypes.string,
   styles: PropTypes.object,
+  changed: PropTypes.func,
+  value: PropTypes.string,
 };
 
 export default InputField;
