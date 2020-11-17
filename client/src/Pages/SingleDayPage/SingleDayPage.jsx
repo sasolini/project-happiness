@@ -16,7 +16,7 @@ const SingleDayPage = () => {
     meditationIsDone: true,
     gratitude: ["", "", ""],
     memoryOfTheDay: "",
-    actOfKindness: "Test",
+    actOfKindness: "",
   };
 
   const [exerciseIsDone, setExerciseIsDone] = useState(
@@ -35,15 +35,21 @@ const SingleDayPage = () => {
     singleDayData.actOfKindness
   );
 
-  useEffect(() => {
-    const getGratitudeStars = () => {
-      let stars = 0;
-      if (gratitude1.length) stars += 1;
-      if (gratitude2.length) stars += 1;
-      if (gratitude3.length) stars += 1;
-      return stars;
-    };
-  }, [gratitude1, gratitude2, gratitude3]);
+  const getGratitudeStars = () => {
+    let stars = 0;
+    if (gratitude1.length) stars += 1;
+    if (gratitude2.length) stars += 1;
+    if (gratitude3.length) stars += 1;
+    return stars;
+  };
+
+  const memoryOfTheDayStar = () => {
+    return memoryOfTheDay.length > 0 ? 1 : 0;
+  };
+
+  const actOfKindnessStar = () => {
+    return actOfKindness.length > 0 ? 1 : 0;
+  };
 
   const activitiesClickHandler = (activity) => {
     if (activity === "exercise") setExerciseIsDone(!exerciseIsDone);
@@ -66,7 +72,7 @@ const SingleDayPage = () => {
       case "hmod":
         setMemoryOfTheDay(val);
         break;
-      case "ack":
+      case "aok":
         setActOfKindness(val);
         break;
       default:
@@ -95,7 +101,7 @@ const SingleDayPage = () => {
           <MeditationIcon />
         </ActivityButton>
       </section>
-      <SectionWrapper title="Gratitude" stars={[1, 3]}>
+      <SectionWrapper title="Gratitude" stars={[getGratitudeStars(), 3]}>
         <InputField
           changed={onChangeHandler}
           value={gratitude1}
@@ -118,7 +124,10 @@ const SingleDayPage = () => {
           placeholder="Gratitude three"
         />
       </SectionWrapper>
-      <SectionWrapper title="Memory of the day" stars={[0, 1]}>
+      <SectionWrapper
+        title="Memory of the day"
+        stars={[memoryOfTheDayStar(), 1]}
+      >
         <InputField
           changed={onChangeHandler}
           value={memoryOfTheDay}
@@ -128,7 +137,7 @@ const SingleDayPage = () => {
           placeholder="Happy memory of the day"
         />
       </SectionWrapper>
-      <SectionWrapper title="Act of kindness" stars={[0, 1]}>
+      <SectionWrapper title="Act of kindness" stars={[actOfKindnessStar(), 1]}>
         <InputField
           changed={onChangeHandler}
           value={actOfKindness}
