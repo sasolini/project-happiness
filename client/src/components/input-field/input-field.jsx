@@ -9,6 +9,7 @@ const InputField = ({
   label,
   placeholder,
   value,
+  type,
   styles,
   rows = 2,
   changed,
@@ -19,7 +20,7 @@ const InputField = ({
         {label && <label for={name}>{label}</label>}
         <input
           onChange={changed}
-          type="text"
+          type={type}
           name={name}
           id={name}
           placeholder={placeholder}

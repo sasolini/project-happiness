@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import CustomButton from "../../components/Custom-button/Custom-button";
 
@@ -15,17 +16,25 @@ const Header = () => (
       Project <span>Happiness</span>
     </h1>
     <div>
-      <CustomButton
-        styles={{ minWidth: "25rem", marginBottom: "var(--size-xxs)" }}
-      >
-        Register
-      </CustomButton>
-      <CustomButton
-        styles={{ minWidth: "25rem", marginBottom: "0.75rem" }}
-        inverted
-      >
-        Log in
-      </CustomButton>
+      <Link to="/register">
+        <CustomButton
+          styles={{
+            minWidth: "25rem",
+          }}
+        >
+          Register
+        </CustomButton>
+      </Link>
+      <Link to="/login">
+        <CustomButton
+          styles={{
+            minWidth: "25rem",
+          }}
+          inverted
+        >
+          Log in
+        </CustomButton>
+      </Link>
     </div>
   </main>
 );
