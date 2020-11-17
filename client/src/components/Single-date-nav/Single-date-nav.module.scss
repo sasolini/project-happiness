@@ -1,8 +1,9 @@
 .singleDateNav {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin: var(--size-m) 0 var(--size-m);
+  margin: var(--size-m) auto var(--size-m) auto;
+  max-width: 35rem;
 }
 
 .arrow {

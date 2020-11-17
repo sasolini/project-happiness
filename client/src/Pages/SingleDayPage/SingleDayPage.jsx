@@ -19,6 +19,7 @@ const SingleDayPage = () => {
     actOfKindness: "",
   };
 
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [exerciseIsDone, setExerciseIsDone] = useState(
     singleDayData.exerciseIsDone
   );
@@ -56,6 +57,12 @@ const SingleDayPage = () => {
     if (activity === "meditation") setMeditationIsDone(!meditationIsDone);
   };
 
+  const dateClickHandler = (step) => {
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() + step);
+    setCurrentDate(newDate);
+  };
+
   const onChangeHandler = (e) => {
     const val = e.target.value;
 
@@ -82,7 +89,11 @@ const SingleDayPage = () => {
 
   return (
     <main className={S.container}>
-      <SingleDateNav className={S.dateNav} />
+      <SingleDateNav
+        clicked={dateClickHandler}
+        currentDate={currentDate}
+        className={S.dateNav}
+      />
       <section className={S.activities}>
         <ActivityButton
           clicked={activitiesClickHandler}
