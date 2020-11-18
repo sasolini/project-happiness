@@ -7,9 +7,9 @@ router.post("/diaries", async (req, res) => {
 
   try {
     await diary.save();
-    res.send(diary);
+    res.status(201).send(diary);
   } catch (e) {
-    res.status(500).send();
+    res.status(400).send();
   }
 });
 

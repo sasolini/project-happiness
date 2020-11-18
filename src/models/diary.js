@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
 
 const Diary = mongoose.model("Diary", {
   workout: {
     type: Boolean,
     default: false,
+    required: true,
   },
   meditation: {
     type: Boolean,
     default: false,
+    required: true,
   },
   gratitude1: {
     type: String,
