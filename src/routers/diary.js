@@ -1,9 +1,13 @@
 const express = require("express");
 const Diary = require("../models/diary");
+const auth = require("../middleware/auth");
 const router = new express.Router();
 
-router.post("/diaries", async (req, res) => {
-  const diary = new Diary(req.body);
+router.post("/diaries", auth, async (req, res) => {
+  const diary = new Diary({
+    ...req.body,
+    owner: req.user._id,
+  });
 
   try {
     await diary.save();
@@ -13,18 +17,22 @@ router.post("/diaries", async (req, res) => {
   }
 });
 
-router.get("/diaries", async (req, res) => {
+router.get("/diaries", auth, async (req, res) => {
   try {
-    const diaries = await Diary.find({});
+    const diaries = await Diary.find({ owner: req.user._id });
     res.send(diaries);
   } catch (e) {
     res.status(500).send();
   }
 });
 
-router.get("/diaries/:id", async (req, res) => {
+router.get("/diaries/:id", auth, async (req, res) => {
   try {
-    const diary = await Diary.findById(req.params.id);
+    const diary = await Diary.findOne({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
+
     if (!diary) {
       res.status(404).send();
     }
@@ -35,7 +43,7 @@ router.get("/diaries/:id", async (req, res) => {
   }
 });
 
-router.patch("/diaries/:id", async (req, res) => {
+router.patch("/diaries/:id", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "workout",
@@ -53,24 +61,29 @@ router.patch("/diaries/:id", async (req, res) => {
   }
 
   try {
-    const diary = await Diary.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
+    const diary = await Diary.findOne({
+      _id: req.params.id,
+      owner: req.user._id,
     });
 
     if (!diary) {
       return res.status(404).send();
     }
 
+    updates.forEach((update) => (diary[update] = req.body[update]));
+    await diary.save();
     res.send(diary);
   } catch (e) {
     res.status(400).send(e);
   }
 });
 
-router.delete("/diaries/:id", async (req, res) => {
+router.delete("/diaries/:id", auth, async (req, res) => {
   try {
-    const diary = await Diary.findByIdAndDelete(req.params.id);
+    const diary = await Diary.findByIdAndDelete({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
 
     if (!diary) {
       return res.status(404).send();

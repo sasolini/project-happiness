@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Diary = require("./diary");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -35,6 +36,12 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+});
+
+userSchema.virtual("diaries", {
+  ref: "Diary",
+  localField: "_id",
+  foreignField: "owner",
 });
 
 userSchema.methods.toJSON = function () {
@@ -71,11 +78,18 @@ userSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
+//Hashes password before saving
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 8);
   }
 
+  next();
+});
+
+//Deletes user diaries when user is deleted
+userSchema.pre("remove", async function (next) {
+  await Diary.deleteMany({ owner: this._id });
   next();
 });
 
