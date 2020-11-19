@@ -17,13 +17,14 @@ const InputField = ({
   if (fieldType === "input") {
     return (
       <div style={styles} className={S.inputGroup}>
-        {label && <label for={name}>{label}</label>}
+        {label && <label htmlFor={name}>{label}</label>}
         <input
           onChange={changed}
           type={type}
           name={name}
           id={name}
           placeholder={placeholder}
+          value={value}
         />
       </div>
     );

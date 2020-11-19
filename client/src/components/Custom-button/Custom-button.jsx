@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 
 import S from "./Custom-button.module.scss";
 
-const CustomButton = ({ children, inverted, styles }) => {
+const CustomButton = ({ children, inverted, styles, type = "button" }) => {
   const btnCn = inverted ? `${S.btn} ${S.inverted}` : S.btn;
   return (
-    <button style={styles} className={btnCn}>
+    <button type={type} style={styles} className={btnCn}>
       {children}
     </button>
   );
