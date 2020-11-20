@@ -66,6 +66,10 @@ const RegAndLoginPage = ({ type }) => {
       })
       .then(
         (response) => {
+          console.log(response.data);
+          if (response.data.token) {
+            localStorage.setItem("user", JSON.stringify(response.data));
+          }
           history.push("/single-day");
         },
         (error) => {
