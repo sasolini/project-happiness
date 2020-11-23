@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 import authHeader from "../../services/auth-header";
@@ -7,6 +7,7 @@ import SingleDateNav from "../../components/Single-date-nav/Single-date-nav";
 import InputField from "../../components/Input-field/Input-field";
 import ActivityButton from "../../components/Activity-button/Activity-button";
 import SectionWrapper from "../../components/Section-wrapper/Section-wrapper";
+import CustomButton from "../../components/Custom-button/Custom-button";
 
 import { ReactComponent as ExerciseIcon } from "../../assets/exercise.svg";
 import { ReactComponent as MeditationIcon } from "../../assets/meditation-m.svg";
@@ -14,7 +15,9 @@ import { ReactComponent as MeditationIcon } from "../../assets/meditation-m.svg"
 import S from "./SingleDayPage.module.scss";
 
 const SingleDayPage = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(
+    new Date(new Date().toDateString())
+  );
   const [workout, setWorkout] = useState(false);
   const [meditation, setMeditation] = useState(false);
   const [gratitude1, setGratitude1] = useState("");
@@ -22,46 +25,72 @@ const SingleDayPage = () => {
   const [gratitude3, setGratitude3] = useState("");
   const [memoryOfTheDay, setMemoryOfTheDay] = useState("");
   const [actOfKindness, setActOfKindness] = useState("");
+  const [dbData, setDbData] = useState({});
+
+  const inputForm = document.getElementsByTagName("form")[0];
+
+  const initialState = {
+    workout: false,
+    meditation: false,
+    gratitude1: "",
+    gratitude2: "",
+    gratitude3: "",
+    memory: "",
+    kindness: "",
+  };
+
+  // const initialState = useMemo(() => {
+  //   return {
+  //     workout: false,
+  //     meditation: false,
+  //     gratitude1: "",
+  //     gratitude2: "",
+  //     gratitude3: "",
+  //     memory: "",
+  //     kindness: "",
+  //   };
+  // });
+
+  const setInitialState = () => {
+    setWorkout(initialState.workout);
+    setMeditation(initialState.meditation);
+    setGratitude1(initialState.gratitude1);
+    setGratitude2(initialState.gratitude2);
+    setGratitude3(initialState.gratitude3);
+    setMemoryOfTheDay(initialState.memory);
+    setActOfKindness(initialState.kindness);
+  };
 
   useEffect(() => {
-    const today = new Date(currentDate.toDateString());
     axios
-      .get(`http://127.0.0.1:9000/diaries?created=${today.toISOString()}`, {
-        headers: authHeader(),
-      })
+      .get(
+        `http://127.0.0.1:9000/diaries?created=${currentDate.toISOString()}`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then(
         (response) => {
-          if (response.data.length) {
-            setWorkout(response.data[0].workout);
-            setMeditation(response.data[0].meditation);
-            setGratitude1(response.data[0].gratitude1);
-            setGratitude2(response.data[0].gratitude2);
-            setGratitude3(response.data[0].gratitude3);
-            setMemoryOfTheDay(response.data[0].memory);
-            setActOfKindness(response.data[0].kindness);
+          const fetchData = response.data[0];
+          if (fetchData) {
+            setDbData(fetchData);
+            setWorkout(fetchData.workout);
+            setMeditation(fetchData.meditation);
+            setGratitude1(fetchData.gratitude1);
+            setGratitude2(fetchData.gratitude2);
+            setGratitude3(fetchData.gratitude3);
+            setMemoryOfTheDay(fetchData.memory);
+            setActOfKindness(fetchData.kindness);
           } else {
-            resetFields();
+            // setDbData(initialState);
           }
         },
         (error) => {
           console.log(error);
         }
       );
-
-    return () => {
-      // cleanup
-    };
+    console.log("useEffect");
   }, [currentDate]);
-
-  const resetFields = () => {
-    setWorkout(false);
-    setMeditation(false);
-    setGratitude1("");
-    setGratitude2("");
-    setGratitude3("");
-    setMemoryOfTheDay("");
-    setActOfKindness("");
-  };
 
   const getGratitudeStars = () => {
     let stars = 0;
@@ -84,8 +113,35 @@ const SingleDayPage = () => {
     if (activity === "meditation") setMeditation(!meditation);
   };
 
+  const checkForChanges = () => {
+    if (
+      dbData.workout !== workout ||
+      dbData.meditation !== meditation ||
+      dbData.gratitude1 !== gratitude1 ||
+      dbData.gratitude2 !== gratitude2 ||
+      dbData.gratitude3 !== gratitude3 ||
+      dbData.memory !== memoryOfTheDay ||
+      dbData.kindness !== actOfKindness
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const dateClickHandler = (step) => {
     const newDate = new Date(currentDate);
+
+    console.log("hasChanges: ", checkForChanges());
+    if (checkForChanges()) {
+      alert("Please save the changes");
+      return;
+    }
+
+    setDbData(initialState);
+    setInitialState();
+    inputForm.reset();
+
     newDate.setDate(newDate.getDate() + step);
     setCurrentDate(newDate);
   };
@@ -105,6 +161,7 @@ const SingleDayPage = () => {
         break;
       case "hmod":
         setMemoryOfTheDay(val);
+        // console.log(memoryOfTheDay);
         break;
       case "aok":
         setActOfKindness(val);
@@ -114,34 +171,58 @@ const SingleDayPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const getCurrentState = () => {
+    return {
+      created: currentDate.toDateString(),
+      workout,
+      meditation,
+      gratitude1,
+      gratitude2,
+      gratitude3,
+      memory: memoryOfTheDay,
+      kindness: actOfKindness,
+    };
+  };
 
-    axios
-      .post(
+  const postUserData = async () => {
+    try {
+      const response = await axios.post(
         "http://127.0.0.1:9000/diaries",
-        {
-          created: currentDate.toDateString(),
-          workout,
-          meditation,
-          gratitude1,
-          gratitude2,
-          gratitude3,
-          memory: memoryOfTheDay,
-          kindness: actOfKindness,
-        },
+
+        getCurrentState(),
         {
           headers: authHeader(),
         }
-      )
-      .then(
-        (response) => {
-          console.log(response);
-        },
-        (error) => {
-          console.log(error);
+      );
+
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const updateUserData = async () => {
+    try {
+      const response = await axios.patch(
+        "http://127.0.0.1:9000/diaries",
+
+        getCurrentState(),
+        {
+          headers: authHeader(),
         }
       );
+
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // updateUserData() //TODO
+    postUserData();
   };
 
   return (
@@ -219,7 +300,10 @@ const SingleDayPage = () => {
             placeholder="Act of kindness"
           />
         </SectionWrapper>
-        <input type="submit" value="Save"></input>
+        <CustomButton type="submit" styles={{ marginLeft: 0 }}>
+          Save
+        </CustomButton>
+        {/* <input type="submit" value="Save"></input> */}
       </form>
     </main>
   );

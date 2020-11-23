@@ -13,6 +13,9 @@ const dateOptions = {
 };
 
 const SingleDateNav = ({ currentDate, clicked }) => {
+  const today = new Date(new Date().toDateString());
+  const isPast = currentDate.getTime() < today.getTime();
+
   return (
     <div className={S.singleDateNav}>
       <div onClick={() => clicked(-1)} className={S.arrow}>
@@ -21,7 +24,12 @@ const SingleDateNav = ({ currentDate, clicked }) => {
       <p className={S.date}>
         {currentDate.toLocaleDateString("en-GB", dateOptions)}
       </p>
-      <div onClick={() => clicked(1)} className={S.arrow}>
+
+      <div
+        onClick={() => clicked(1)}
+        className={S.arrow}
+        style={{ visibility: isPast ? "visible" : "hidden" }}
+      >
         <RightArrow />
       </div>
     </div>
