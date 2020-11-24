@@ -19,7 +19,7 @@ const InputField = ({
       <div style={styles} className={S.inputGroup}>
         {label && <label htmlFor={name}>{label}</label>}
         <input
-          onChange={changed}
+          onInput={changed}
           type={type}
           name={name}
           id={name}
@@ -33,7 +33,7 @@ const InputField = ({
       <div style={styles} className={S.inputGroup}>
         {label && <label for={name}>{label}</label>}
         <textarea
-          onChange={changed}
+          onInput={changed}
           name={name}
           id={name}
           defaultValue={value}
