@@ -1,0 +1,62 @@
+.drawer {
+  height: 100vh;
+  width: 25rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: var(--color-grey-dark);
+  padding: 5rem 2rem 2rem 2rem;
+  border-right: 1px solid var(--color-grey);
+}
+
+.optionsItem {
+  color: var(--color-light);
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  cursor: pointer;
+
+  p {
+    margin: 0 0 0 1rem;
+  }
+
+  &:hover {
+    color: var(--color-primary);
+    .icon {
+      fill: var(--color-primary);
+    }
+  }
+}
+
+.icon {
+  fill: var(--color-light);
+  height: 2.4rem;
+  width: 2.4rem;
+}
+
+.danger {
+  color: var(--color-danger);
+  fill: var(--color-danger);
+
+  .icon {
+    fill: var(--color-danger);
+  }
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 1rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    .icon {
+      color: var(--color-primary);
+      fill: var(--color-primary);
+    }
+  }
+}

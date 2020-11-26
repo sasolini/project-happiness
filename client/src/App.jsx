@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,6 +8,7 @@ import {
 
 import authHeader from "./services/auth-header";
 import { UserContext } from "./context/userContext";
+import SideDrawer from "./components/Side-drawer/Side-drawer";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./Pages/HomePage/HomePage";
@@ -15,17 +16,28 @@ import RegAndLoginPage from "./Pages/RegAndLoginPage/RegAndLoginPage";
 import SingleDayPage from "./Pages/SingleDayPage/SingleDayPage";
 
 import S from "./App.module.scss";
-import TestPage from "./Pages/TestPage";
 
 const App = () => {
   const [authToken, setAuthToken] = useState(authHeader().Authorization);
+  const [showSideDrawer, setShowSideDrawer] = useState(false);
+
+  const logoutHandler = () => {
+    localStorage.removeItem("user");
+    setAuthToken(null);
+  };
 
   return (
     <Router>
       <UserContext.Provider value={{ authToken, setAuthToken }}>
         <div className={S.app}>
+          {showSideDrawer && (
+            <SideDrawer
+              close={() => setShowSideDrawer(false)}
+              logout={logoutHandler}
+            />
+          )}
           <div className={S.container}>
-            <Header />
+            <Header openMenu={() => setShowSideDrawer(true)} />
             <Switch>
               <Route path="/register">
                 {authToken ? (
@@ -45,7 +57,6 @@ const App = () => {
                 {!authToken ? <Redirect to="/" /> : <SingleDayPage />}
               </Route>
               <Route path="/">
-                {/* <TestPage /> */}
                 {authToken ? <Redirect to="/single-day" /> : <HomePage />}
               </Route>
             </Switch>

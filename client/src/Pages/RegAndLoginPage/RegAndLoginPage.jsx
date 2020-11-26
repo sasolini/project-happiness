@@ -48,7 +48,7 @@ const RegAndLoginPage = ({ type }) => {
           setAuthToken(res.data.token);
         }
       } catch (error) {
-        console.log("Email and password do not match!", error);
+        alert("Email and password do not match!");
       }
     };
 
