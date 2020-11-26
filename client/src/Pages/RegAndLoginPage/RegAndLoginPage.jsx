@@ -1,45 +1,23 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 
+import { UserContext } from "../../context/userContext";
 import CustomButton from "../../components/Custom-button/Custom-button";
 import InputField from "../../components/Input-field/Input-field";
 
 import S from "./RegAndLoginPage.module.scss";
 
 const RegAndLoginPage = ({ type }) => {
+  const { setAuthToken } = useContext(UserContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
 
   const getAxiosUrl = () => {
     if (type === "register") {
       return "http://127.0.0.1:9000/users";
     } else if (type === "login") {
       return "http://127.0.0.1:9000/users/login";
-    }
-  };
-
-  const getRegOrLoginBtn = () => {
-    if (type === "register") {
-      return (
-        <CustomButton
-          type="submit"
-          styles={{ minWidth: "25rem", marginBottom: "0.75rem" }}
-        >
-          Register
-        </CustomButton>
-      );
-    } else if (type === "login") {
-      return (
-        <CustomButton
-          type="submit"
-          styles={{ minWidth: "25rem", marginBottom: "0.75rem" }}
-          inverted
-        >
-          Log in
-        </CustomButton>
-      );
     }
   };
 
@@ -58,23 +36,23 @@ const RegAndLoginPage = ({ type }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const sendPostData = async () => {
+      try {
+        const res = await axios.post(getAxiosUrl(), {
+          email,
+          password,
+        });
 
-    axios
-      .post(getAxiosUrl(), {
-        email,
-        password,
-      })
-      .then(
-        (response) => {
-          if (response.data.token) {
-            localStorage.setItem("user", JSON.stringify(response.data));
-          }
-          history.push("/single-day");
-        },
-        (error) => {
-          alert("Email and password do not match!");
+        if (res.data.token) {
+          localStorage.setItem("user", JSON.stringify(res.data));
+          setAuthToken(res.data.token);
         }
-      );
+      } catch (error) {
+        console.log("Email and password do not match!", error);
+      }
+    };
+
+    sendPostData();
   };
 
   return (
@@ -102,7 +80,13 @@ const RegAndLoginPage = ({ type }) => {
           value={password}
           changed={handleChange}
         />
-        {getRegOrLoginBtn()}
+        <CustomButton
+          type="submit"
+          styles={{ minWidth: "25rem", marginBottom: "0.75rem" }}
+          inverted={type === "register" ? false : true}
+        >
+          {type === "register" ? "Register" : "Login"}
+        </CustomButton>
       </form>
     </main>
   );

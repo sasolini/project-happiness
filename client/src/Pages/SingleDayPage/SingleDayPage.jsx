@@ -1,7 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 
-import authHeader from "../../services/auth-header";
+import {
+  getDbDataAsync,
+  postDiaryToDbAsync,
+  updateDiaryInDbAsync,
+} from "./SingleDayAPI";
 
 import SingleDateNav from "../../components/Single-date-nav/Single-date-nav";
 import InputField from "../../components/Input-field/Input-field";
@@ -19,15 +22,17 @@ const SingleDayPage = () => {
     new Date(new Date().toDateString())
   );
 
-  const initialState = {
-    workout: false,
-    meditation: false,
-    gratitude1: "",
-    gratitude2: "",
-    gratitude3: "",
-    memory: "",
-    kindness: "",
-  };
+  const initialState = useMemo(() => {
+    return {
+      workout: false,
+      meditation: false,
+      gratitude1: "",
+      gratitude2: "",
+      gratitude3: "",
+      memory: "",
+      kindness: "",
+    };
+  }, []);
 
   const [workout, setWorkout] = useState(false);
   const [meditation, setMeditation] = useState(false);
@@ -67,43 +72,29 @@ const SingleDayPage = () => {
   ]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(
-          `http://127.0.0.1:9000/diaries?created=${currentDate.toISOString()}`,
-          {
-            headers: authHeader(),
-          }
-        );
-        const diary = res.data[0];
-        if (diary) {
-          setDbData(diary);
-          setWorkout(diary.workout);
-          setMeditation(diary.meditation);
-          setGratitude1(diary.gratitude1);
-          setGratitude2(diary.gratitude2);
-          setGratitude3(diary.gratitude3);
-          setMemoryOfTheDay(diary.memory);
-          setActOfKindness(diary.kindness);
-        }
-      } catch (e) {
-        console.log(e);
+    setHasChanges(checkForChanges());
+  }, [hasChanges, checkForChanges]);
+
+  useEffect(() => {
+    getDbDataAsync(currentDate).then((data) => {
+      if (data) {
+        setDbData(data);
+      } else {
+        setDbData(initialState);
       }
-    };
+    });
+  }, [currentDate, initialState]);
 
-    fetchData();
-    console.log("useEffect");
-  }, [currentDate]);
-
-  const setInitialState = () => {
-    setWorkout(initialState.workout);
-    setMeditation(initialState.meditation);
-    setGratitude1(initialState.gratitude1);
-    setGratitude2(initialState.gratitude2);
-    setGratitude3(initialState.gratitude3);
-    setMemoryOfTheDay(initialState.memory);
-    setActOfKindness(initialState.kindness);
-  };
+  useEffect(() => {
+    setWorkout(dbData.workout);
+    setMeditation(dbData.meditation);
+    setGratitude1(dbData.gratitude1);
+    setGratitude2(dbData.gratitude2);
+    setGratitude3(dbData.gratitude3);
+    setMemoryOfTheDay(dbData.memory);
+    setActOfKindness(dbData.kindness);
+    setHasChanges(false);
+  }, [dbData]);
 
   const resetToDbData = () => {
     inputForm.reset();
@@ -115,10 +106,6 @@ const SingleDayPage = () => {
     setMemoryOfTheDay(dbData.memory);
     setActOfKindness(dbData.kindness);
   };
-
-  useEffect(() => {
-    setHasChanges(checkForChanges());
-  }, [hasChanges, checkForChanges]);
 
   const getGratitudeStars = () => {
     let stars = 0;
@@ -142,17 +129,16 @@ const SingleDayPage = () => {
   };
 
   const dateClickHandler = (step) => {
-    const newDate = new Date(currentDate);
-
-    if (checkForChanges()) {
+    if (hasChanges) {
       alert("Please save the changes");
       return;
     }
 
-    setDbData(initialState);
-    setInitialState();
-    inputForm.reset();
+    // setDbData(initialState);
+    // setInitialState();
+    // inputForm.reset();
 
+    const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + step);
     setCurrentDate(newDate);
   };
@@ -194,50 +180,15 @@ const SingleDayPage = () => {
     };
   };
 
-  const postUserData = async () => {
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:9000/diaries",
-
-        getCurrentState(),
-        {
-          headers: authHeader(),
-        }
-      );
-
-      setDbData(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const updateUserData = async (id) => {
-    const data = getCurrentState();
-    delete data.created;
-
-    try {
-      const response = await axios.patch(
-        `http://127.0.0.1:9000/diaries/${id}`,
-
-        data,
-        {
-          headers: authHeader(),
-        }
-      );
-
-      setDbData(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (dbData._id) {
-      updateUserData(dbData._id);
+      updateDiaryInDbAsync(dbData._id, getCurrentState()).then((res) =>
+        setDbData(res)
+      );
     } else {
-      postUserData();
+      postDiaryToDbAsync(getCurrentState()).then((res) => setDbData(res));
     }
   };
 
@@ -322,7 +273,10 @@ const SingleDayPage = () => {
             <CustomButton
               type="button"
               inverted
-              clicked={() => resetToDbData()}
+              clicked={() => {
+                resetToDbData();
+                setHasChanges(false);
+              }}
             >
               Cancel
             </CustomButton>
