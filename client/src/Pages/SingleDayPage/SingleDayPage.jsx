@@ -134,9 +134,7 @@ const SingleDayPage = () => {
       return;
     }
 
-    // setDbData(initialState);
-    // setInitialState();
-    // inputForm.reset();
+    inputForm.reset();
 
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + step);
