@@ -43,6 +43,7 @@ const SideDrawer = ({ close, logout }) => {
 
 SideDrawer.propTypes = {
   close: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 export default SideDrawer;

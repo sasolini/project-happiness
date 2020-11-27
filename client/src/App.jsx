@@ -43,14 +43,14 @@ const App = () => {
                 {authToken ? (
                   <Redirect to="/single-day" />
                 ) : (
-                  <RegAndLoginPage type="register" />
+                  <RegAndLoginPage isRegister={true} />
                 )}
               </Route>
               <Route path="/login">
                 {authToken ? (
                   <Redirect to="/single-day" />
                 ) : (
-                  <RegAndLoginPage type="login" />
+                  <RegAndLoginPage isRegister={false} />
                 )}
               </Route>
               <Route path="/single-day">

@@ -1,25 +1,18 @@
 import React, { useState, useContext } from "react";
-import axios from "axios";
+import PropTypes from "prop-types";
 
 import { UserContext } from "../../context/userContext";
 import CustomButton from "../../components/Custom-button/Custom-button";
 import InputField from "../../components/Input-field/Input-field";
+import { sendRegOrLoginAsync } from "./RegAndLoginAPI";
 
 import S from "./RegAndLoginPage.module.scss";
 
-const RegAndLoginPage = ({ type }) => {
+const RegAndLoginPage = ({ isRegister }) => {
   const { setAuthToken } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const getAxiosUrl = () => {
-    if (type === "register") {
-      return "http://127.0.0.1:9000/users";
-    } else if (type === "login") {
-      return "http://127.0.0.1:9000/users/login";
-    }
-  };
 
   const handleChange = (e) => {
     switch (e.target.name) {
@@ -36,23 +29,10 @@ const RegAndLoginPage = ({ type }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const sendPostData = async () => {
-      try {
-        const res = await axios.post(getAxiosUrl(), {
-          email,
-          password,
-        });
 
-        if (res.data.token) {
-          localStorage.setItem("user", JSON.stringify(res.data));
-          setAuthToken(res.data.token);
-        }
-      } catch (error) {
-        alert("Email and password do not match!");
-      }
-    };
-
-    sendPostData();
+    sendRegOrLoginAsync(isRegister, email, password).then((authToken) => {
+      setAuthToken(authToken);
+    });
   };
 
   return (
@@ -83,13 +63,17 @@ const RegAndLoginPage = ({ type }) => {
         <CustomButton
           type="submit"
           styles={{ minWidth: "25rem", marginBottom: "0.75rem" }}
-          inverted={type === "register" ? false : true}
+          inverted={isRegister ? false : true}
         >
-          {type === "register" ? "Register" : "Login"}
+          {isRegister ? "Register" : "Login"}
         </CustomButton>
       </form>
     </main>
   );
+};
+
+RegAndLoginPage.propTypes = {
+  isRegister: PropTypes.bool.isRequired,
 };
 
 export default RegAndLoginPage;

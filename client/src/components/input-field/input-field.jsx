@@ -55,6 +55,7 @@ InputField.propTypes = {
   styles: PropTypes.object,
   changed: PropTypes.func,
   value: PropTypes.string,
+  type: PropTypes.string,
 };
 
 export default InputField;

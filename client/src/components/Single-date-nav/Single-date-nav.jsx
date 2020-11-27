@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import { ReactComponent as LeftArrow } from "./assets/left-arrow.svg";
 import { ReactComponent as RightArrow } from "./assets/right-arrow.svg";
@@ -34,6 +35,11 @@ const SingleDateNav = ({ currentDate, clicked }) => {
       </div>
     </div>
   );
+};
+
+SingleDateNav.propTypes = {
+  currentDate: PropTypes.object.isRequired,
+  clicked: PropTypes.func.isRequired,
 };
 
 export default SingleDateNav;

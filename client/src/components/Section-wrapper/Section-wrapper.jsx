@@ -18,6 +18,7 @@ const SectionWrapper = ({ title, stars, children }) => (
 SectionWrapper.propTypes = {
   title: PropTypes.string,
   children: PropTypes.node,
+  stars: PropTypes.array.isRequired,
 };
 
 export default SectionWrapper;

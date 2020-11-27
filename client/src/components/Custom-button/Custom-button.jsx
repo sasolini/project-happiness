@@ -21,6 +21,7 @@ const CustomButton = ({
 CustomButton.propTypes = {
   children: PropTypes.node.isRequired,
   inverted: PropTypes.bool,
+  type: PropTypes.string,
   styles: PropTypes.object,
   clicked: PropTypes.func,
 };

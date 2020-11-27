@@ -22,8 +22,8 @@ const ActivityButton = ({ children, size = 4, name, done, clicked }) => {
 };
 
 ActivityButton.propTypes = {
-  size: PropTypes.string,
   children: PropTypes.node.isRequired,
+  size: PropTypes.string,
   name: PropTypes.string.isRequired,
   done: PropTypes.bool.isRequired,
   clicked: PropTypes.func,
