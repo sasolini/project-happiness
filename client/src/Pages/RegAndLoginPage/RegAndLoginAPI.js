@@ -6,10 +6,13 @@ export const sendRegOrLoginAsync = async (isRegister, email, password) => {
   isRegister ? (requestType = "users") : (requestType = "users/login");
 
   try {
-    const res = await axios.post(`http://127.0.0.1:9000/${requestType}`, {
-      email,
-      password,
-    });
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/${requestType}`,
+      {
+        email,
+        password,
+      }
+    );
 
     if (res.data.token) {
       localStorage.setItem("user", JSON.stringify(res.data));

@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
-const Diary = mongoose.model("Diary", {
+const diarySchema = new mongoose.Schema({
+  created: {
+    type: Date,
+    required: true,
+    unique: true,
+  },
   workout: {
     type: Boolean,
     default: false,
@@ -37,5 +42,7 @@ const Diary = mongoose.model("Diary", {
     ref: "User",
   },
 });
+
+const Diary = mongoose.model("Diary", diarySchema);
 
 module.exports = Diary;

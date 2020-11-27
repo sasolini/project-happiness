@@ -4,7 +4,7 @@ import authHeader from "../../services/auth-header";
 export const logOutAsync = async (option) => {
   try {
     const response = await axios.post(
-      `http://127.0.0.1:9000/users/${option.toLowerCase()}`,
+      `${process.env.REACT_APP_API_URL}/users/${option.toLowerCase()}`,
 
       {},
       {

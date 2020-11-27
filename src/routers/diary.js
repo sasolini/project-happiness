@@ -18,8 +18,15 @@ router.post("/diaries", auth, async (req, res) => {
 });
 
 router.get("/diaries", auth, async (req, res) => {
+  const match = {
+    ...req.query,
+    owner: req.user._id,
+  };
+
+  if (match.workout === "true") match.workout = true;
+
   try {
-    const diaries = await Diary.find({ owner: req.user._id });
+    const diaries = await Diary.find(match);
     res.send(diaries);
   } catch (e) {
     res.status(500).send();
