@@ -16,18 +16,16 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Priority serve React app.
+app.use(express.static(path.resolve(__dirname, "../client/build")));
+
 app.use(userRouter);
 app.use(diaryRouter);
 
-// Serve React app
-app.get("/", async (req, res) => {
-  try {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"));
-  } catch (e) {
-    res.status(500).send();
-  }
+// All remaining requests return the React app, so it can handle routing.
+app.get("*", function (req, res) {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
-app.use(express.static("client/build"));
 
 app.listen(port, () => {
   console.log(`Server listening at port: ${port}`);
