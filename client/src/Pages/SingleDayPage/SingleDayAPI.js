@@ -6,7 +6,7 @@ export const getDbDataAsync = async (currentDate) => {
     const res = await axios.get(
       `${
         process.env.REACT_APP_API_URL
-      }/diaries?created=${currentDate.toISOString()}`,
+      }diaries?created=${currentDate.toISOString()}`,
       {
         headers: authHeader(),
       }
@@ -24,7 +24,7 @@ export const getDbDataAsync = async (currentDate) => {
 export const postDiaryToDbAsync = async (currentState) => {
   try {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/diaries`,
+      `${process.env.REACT_APP_API_URL}diaries`,
 
       currentState,
       {
@@ -43,7 +43,7 @@ export const updateDiaryInDbAsync = async (diaryId, data) => {
 
   try {
     const response = await axios.patch(
-      `${process.env.REACT_APP_API_URL}/diaries/${diaryId}`,
+      `${process.env.REACT_APP_API_URL}diaries/${diaryId}`,
 
       data,
       {

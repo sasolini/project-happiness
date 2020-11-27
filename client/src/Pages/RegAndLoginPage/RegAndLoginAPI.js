@@ -7,7 +7,7 @@ export const sendRegOrLoginAsync = async (isRegister, email, password) => {
 
   try {
     const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/${requestType}`,
+      `${process.env.REACT_APP_API_URL}${requestType}`,
       {
         email,
         password,
