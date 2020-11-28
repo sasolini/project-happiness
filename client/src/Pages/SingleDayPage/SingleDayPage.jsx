@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 
 import {
   getDbDataAsync,
@@ -44,7 +50,7 @@ const SingleDayPage = () => {
   const [dbData, setDbData] = useState(initialState);
   const [hasChanges, setHasChanges] = useState(false);
 
-  const inputForm = document.getElementsByTagName("form")[0];
+  const formRef = useRef(null);
 
   const checkForChanges = useCallback(() => {
     if (
@@ -97,7 +103,7 @@ const SingleDayPage = () => {
   }, [dbData]);
 
   const resetToDbData = () => {
-    inputForm.reset();
+    formRef.current.reset();
     setWorkout(dbData.workout);
     setMeditation(dbData.meditation);
     setGratitude1(dbData.gratitude1);
@@ -134,7 +140,7 @@ const SingleDayPage = () => {
       return;
     }
 
-    inputForm.reset();
+    formRef.current.reset();
 
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + step);
@@ -197,7 +203,7 @@ const SingleDayPage = () => {
         currentDate={currentDate}
         className={S.dateNav}
       />
-      <form onSubmit={handleSubmit}>
+      <form ref={formRef} onSubmit={handleSubmit}>
         <section className={S.activities}>
           <ActivityButton
             clicked={activitiesClickHandler}
