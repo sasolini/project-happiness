@@ -9,6 +9,16 @@
   border-right: 1px solid var(--color-grey);
 }
 
+.options {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.group1 {
+  flex: 1;
+}
+
 .optionsItem {
   color: var(--color-light);
   display: flex;

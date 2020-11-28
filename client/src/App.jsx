@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import authHeader from "./services/auth-header";
+import { getUsersProfileAsync } from "./AppAPI";
 import { UserContext } from "./context/userContext";
 import SideDrawer from "./components/Side-drawer/Side-drawer";
 import Header from "./components/Header/Header";
@@ -20,6 +21,14 @@ import S from "./App.module.scss";
 const App = () => {
   const [authToken, setAuthToken] = useState(authHeader().Authorization);
   const [showSideDrawer, setShowSideDrawer] = useState(false);
+
+  useEffect(() => {
+    if (authToken) {
+      getUsersProfileAsync().then((res) => {
+        if (!res) logoutHandler();
+      });
+    }
+  }, [authToken]);
 
   const logoutHandler = () => {
     localStorage.removeItem("user");
