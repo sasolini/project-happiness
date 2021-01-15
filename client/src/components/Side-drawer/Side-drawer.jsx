@@ -12,12 +12,14 @@ const SideDrawer = ({ close, logout }) => {
   const logOutHandler = (option) => {
     logOutAsync(option).then((res) => {
       logout();
+      close();
     });
   };
 
   const deleteAccHandler = () => {
     deleteUserAsync().then((res) => {
       logout();
+      close();
       console.log("Account deleted");
     });
   };
