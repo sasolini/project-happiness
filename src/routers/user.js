@@ -63,18 +63,6 @@ router.get("/users/me", auth, async (req, res) => {
   }
 });
 
-router.get("/users/:id", async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).send();
-    }
-    res.send(user);
-  } catch (e) {
-    res.status(500).send();
-  }
-});
-
 router.patch("/users/me", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "email", "password"];
