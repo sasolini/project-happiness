@@ -9,7 +9,7 @@ import { sendRegOrLoginAsync } from "./RegAndLoginAPI";
 import S from "./RegAndLoginPage.module.scss";
 
 const RegAndLoginPage = ({ isRegister }) => {
-  const { setAuthToken } = useContext(UserContext);
+  const { setIsLoggedIn } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,8 +30,8 @@ const RegAndLoginPage = ({ isRegister }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    sendRegOrLoginAsync(isRegister, email, password).then((authToken) => {
-      setAuthToken(authToken);
+    sendRegOrLoginAsync(isRegister, email, password).then((res) => {
+      setIsLoggedIn(res);
     });
   };
 

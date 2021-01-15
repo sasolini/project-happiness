@@ -19,25 +19,25 @@ import SingleDayPage from "./Pages/SingleDayPage/SingleDayPage";
 import S from "./App.module.scss";
 
 const App = () => {
-  const [authToken, setAuthToken] = useState(authHeader().Authorization);
   const [showSideDrawer, setShowSideDrawer] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    if (authToken) {
+    if (authHeader()) {
       getUsersProfileAsync().then((res) => {
         if (!res) logoutHandler();
       });
     }
-  }, [authToken]);
+  }, []);
 
   const logoutHandler = () => {
     localStorage.removeItem("user");
-    setAuthToken(null);
+    setIsLoggedIn(false);
   };
 
   return (
     <Router>
-      <UserContext.Provider value={{ authToken, setAuthToken }}>
+      <UserContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
         <div className={S.app}>
           {showSideDrawer && (
             <SideDrawer
@@ -49,24 +49,24 @@ const App = () => {
             <Header openMenu={() => setShowSideDrawer(true)} />
             <Switch>
               <Route path="/register">
-                {authToken ? (
+                {isLoggedIn ? (
                   <Redirect to="/single-day" />
                 ) : (
                   <RegAndLoginPage isRegister={true} />
                 )}
               </Route>
               <Route path="/login">
-                {authToken ? (
+                {isLoggedIn ? (
                   <Redirect to="/single-day" />
                 ) : (
                   <RegAndLoginPage isRegister={false} />
                 )}
               </Route>
               <Route path="/single-day">
-                {!authToken ? <Redirect to="/" /> : <SingleDayPage />}
+                {!isLoggedIn ? <Redirect to="/" /> : <SingleDayPage />}
               </Route>
               <Route path="/">
-                {authToken ? <Redirect to="/single-day" /> : <HomePage />}
+                {isLoggedIn ? <Redirect to="/single-day" /> : <HomePage />}
               </Route>
             </Switch>
             <Footer />

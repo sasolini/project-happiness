@@ -17,7 +17,9 @@
   cursor: pointer;
 }
 
-h1 {
+.title {
   font-size: var(--size-l);
   color: var(--color-primary);
+  flex: 1;
+  text-align: center;
 }

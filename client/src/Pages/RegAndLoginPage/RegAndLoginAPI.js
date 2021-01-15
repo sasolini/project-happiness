@@ -16,7 +16,8 @@ export const sendRegOrLoginAsync = async (isRegister, email, password) => {
 
     if (res.data.token) {
       localStorage.setItem("user", JSON.stringify(res.data));
-      return res.data.token;
+      // return res.data.token;
+      return true;
     }
   } catch (error) {
     alert("Email and password do not match!");
